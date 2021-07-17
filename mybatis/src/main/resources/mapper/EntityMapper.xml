@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.demo.spring.mybatis.mapper.EntityMapper">
+
+    <insert id="create" parameterType="com.demo.spring.mybatis.entity.Entity" keyProperty="id" keyColumn="id">
+        insert into entity(id, name, gender)
+        VALUES (#{id}, #{name}, #{gender})
+    </insert>
+
+    <update id="update" parameterType="com.demo.spring.mybatis.entity.Entity">
+        update entity
+        set name=#{name},
+            gender=#{gender},
+            money=#{money}
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        delete
+        from entity
+        where id = #{id}
+    </delete>
+
+    <select id="getById" resultType="com.demo.spring.mybatis.entity.Entity">
+        select *
+        from entity
+        where id = #{id}
+    </select>
+
+    <select id="getListByPage" resultType="com.demo.spring.mybatis.entity.Entity">
+        select *
+        from entity
+    </select>
+</mapper>

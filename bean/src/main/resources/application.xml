@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        https://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        https://www.springframework.org/schema/context/spring-context.xsd"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:c="http://www.springframework.org/schema/c">
+
+    <bean id="bean1" class="com.demo.spring.bean.xml.Bean" init-method="init" destroy-method="destroy" primary="true">
+        <property name="id" value="1"/>
+        <property name="name" value="xml-bean-1"/>
+    </bean>
+
+    <import resource="bean2.xml"/>
+
+    <bean id="bean3" class="com.demo.spring.bean.xml.Bean">
+        <constructor-arg name="id" type="int" value="3"/>
+        <constructor-arg name="name" type="java.lang.String" value="xml-bean-3"/>
+    </bean>
+
+    <bean id="beanInstanceFactory" class="com.demo.spring.bean.xml.BeanInstanceFactory"/>
+
+    <bean id="bean4" factory-bean="beanInstanceFactory" factory-method="createBean"
+          c:id="4"
+          c:name="xml-bean-4">
+    </bean>
+
+    <bean id="bean5" class="com.demo.spring.bean.xml.Bean" depends-on="bean1"
+          p:id="5"
+          p:name="xml-bean-5" scope="prototype">
+    </bean>
+
+    <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+        <property name="locations" value="classpath:jdbc.properties"/>
+    </bean>
+
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <bean id="dataSource" destroy-method="close"
+          class="com.demo.spring.bean.xml.DataSource">
+        <property name="driverClassName" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+
+    <context:annotation-config/>
+
+</beans>
