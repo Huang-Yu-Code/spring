@@ -9,41 +9,56 @@ import java.util.List;
 
 /**
  * @author codingob
+ * @version 1.0.0
+ * @since JDK1.8
  */
 @Mapper
 @Repository
 public interface EntityMapper {
     /**
      * 插入数据
+     *
      * @param entity 实体
-     * @return 插入条数
+     * @return 插入数
      */
     int create(Entity entity);
 
     /**
-     * 删除数据
-     * @param id 实体Id
-     * @return 删除条数
+     * 物理删除数据
+     *
+     * @param id ID
+     * @return 删除数
      */
     int deleteById(@Param("id") int id);
 
     /**
-     * 获取单条数据
-     * @param id 实体Id
-     * @return Entity
+     * 逻辑删除数据
+     *
+     * @param id ID
+     * @return 删除数
+     */
+    int logicalDeleteById(@Param("id") int id);
+
+    /**
+     * 查询数据
+     *
+     * @param id ID
+     * @return 单条数据
      */
     Entity getById(@Param("id") int id);
 
     /**
-     * 分页
-     * @return Entity
+     * 查询多条数据
+     *
+     * @return 数据集合
      */
     List<Entity> getListByPage();
 
     /**
      * 更新数据
+     *
      * @param entity 实体
-     * @return 更新条数
+     * @return 更新数
      */
     int update(Entity entity);
 }

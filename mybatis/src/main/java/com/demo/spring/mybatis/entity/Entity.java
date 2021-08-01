@@ -10,6 +10,8 @@ import java.sql.Timestamp;
 
 /**
  * @author codingob
+ * @version 1.0.0
+ * @since JDK1.8
  */
 @Data
 @NoArgsConstructor
@@ -17,7 +19,8 @@ import java.sql.Timestamp;
 public class Entity implements Serializable {
     private Integer id;
     private String name;
-    private Boolean gender;
+    private boolean gender;
     private BigDecimal money;
     private Timestamp createTime;
+    private boolean isDelete;
 }

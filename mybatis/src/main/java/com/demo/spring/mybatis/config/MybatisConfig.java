@@ -3,13 +3,13 @@ package com.demo.spring.mybatis.config;
 import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.datasource.pooled.PooledDataSource;
 import org.apache.ibatis.plugin.Interceptor;
-import org.apache.ibatis.session.Configuration;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -21,8 +21,13 @@ import java.io.IOException;
 import java.util.Properties;
 
 /**
+ * Mybatis配置
+ *
  * @author codingob
+ * @version 1.0.0
+ * @since JDK1.8
  */
+@Configuration
 @PropertySource("classpath:mybatis.properties")
 @MapperScan("com.demo.spring.mybatis.mapper")
 @ComponentScan("com.demo.spring.mybatis")
@@ -41,6 +46,11 @@ public class MybatisConfig {
     @Value("${mybatis.map-underscore-to-camel-case}")
     private boolean mapUnderscoreToCamelCase;
 
+    /**
+     * 数据源配置
+     *
+     * @return 数据源
+     */
     @Bean
     public DataSource dataSource() {
         return new PooledDataSource(driverClassName, url, username, password);
@@ -48,6 +58,7 @@ public class MybatisConfig {
 
     /**
      * 加载Mapper.xml
+     *
      * @return Resource
      * @throws IOException IO异常
      */
@@ -59,10 +70,11 @@ public class MybatisConfig {
 
     /**
      * 加载Mybatis配置信息
+     *
      * @return Configuration
      */
     @Bean
-    public org.apache.ibatis.session.Configuration configuration(){
+    public org.apache.ibatis.session.Configuration configuration() {
         org.apache.ibatis.session.Configuration configuration = new org.apache.ibatis.session.Configuration();
         configuration.setMapUnderscoreToCamelCase(mapUnderscoreToCamelCase);
         return configuration;
@@ -70,38 +82,41 @@ public class MybatisConfig {
 
     /**
      * 分页插件
+     *
      * @return Interceptor
      */
     @Bean
-    public Interceptor pagePlugin(){
+    public Interceptor pagePlugin() {
         PageInterceptor pageInterceptor = new PageInterceptor();
         Properties properties = new Properties();
-        properties.setProperty("params","mysql");
+        properties.setProperty("params", "mysql");
         pageInterceptor.setProperties(properties);
         return pageInterceptor;
     }
 
     /**
      * 插件配置
+     *
      * @param interceptors 插件
      * @return Interceptor[]
      */
     @Bean
-    public Interceptor[] interceptors(Interceptor...interceptors){
+    public Interceptor[] interceptors(Interceptor... interceptors) {
         return interceptors;
     }
 
     /**
      * 创建工厂SqlSessionFactory
+     *
      * @return SqlSessionFactory
      * @throws Exception Exception
      */
     @Bean
     public SqlSessionFactory sqlSessionFactory(DataSource dataSource,
                                                Resource[] resources,
-                                               Configuration configuration,
+                                               org.apache.ibatis.session.Configuration configuration,
                                                Interceptor[] interceptors
-                                               ) throws Exception {
+    ) throws Exception {
         SqlSessionFactoryBean factoryBean = new SqlSessionFactoryBean();
         factoryBean.setDataSource(dataSource);
         factoryBean.setMapperLocations(resources);
@@ -112,10 +127,11 @@ public class MybatisConfig {
 
     /**
      * 交由Spring容器管理事务
+     *
      * @return transactionManager
      */
     @Bean
-    public DataSourceTransactionManager transactionManager(DataSource dataSource){
+    public DataSourceTransactionManager transactionManager(DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 }

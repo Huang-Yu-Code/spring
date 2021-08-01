@@ -12,9 +12,9 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * 事务-转账
- *
  * @author codingob
+ * @version 1.0.0
+ * @since JDK1.8
  */
 @Service
 public class EntityService {
@@ -75,13 +75,14 @@ public class EntityService {
     }
 
     /**
-     * 清空账号
+     * 注销账号
      *
      * @param id 账号Id
      * @return 删除条数
      */
     @Transactional(rollbackFor = Exception.class)
     public int clear(int id) {
+        entityMapper.logicalDeleteById(id);
         return entityMapper.deleteById(id);
     }
 

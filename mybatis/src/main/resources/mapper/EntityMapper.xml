@@ -15,22 +15,30 @@
             gender=#{gender},
             money=#{money}
         where id = #{id}
+          and is_delete = 0
+    </update>
+    <update id="logicalDeleteById">
+        update entity
+        set is_delete=1
+        where id = #{id}
+          and is_delete = 0
     </update>
 
     <delete id="deleteById" parameterType="int">
         delete
         from entity
         where id = #{id}
+          and is_delete = 1
     </delete>
 
     <select id="getById" resultType="com.demo.spring.mybatis.entity.Entity">
         select *
         from entity
-        where id = #{id}
+        where id = #{id} and is_delete = 0
     </select>
 
     <select id="getListByPage" resultType="com.demo.spring.mybatis.entity.Entity">
         select *
-        from entity
+        from entity where is_delete = 0
     </select>
 </mapper>

@@ -8,54 +8,28 @@ Version: 5.3.9
 
 [文档](https://docs.spring.io/spring-framework/docs/current/reference/html/)
 
-## Bean
-
-[示例](./bean)
+## [Bean](./bean)
 
 ## Data
 
-### JPA
+### [JPA](./data/jpa)
 
-### JDBC
+### [JDBC](./data/jdbc)
 
-### Redis
+### [Redis](./data/redis)
 
-### Mongo
+### [Mongo](./data/mongo)
 
-[示例](./data)
+## [Mybatis](./mybatis)
 
-## Mybatis
+## [Mybatis-Plus](./mybatis-plus)
 
-[官网](https://blog.mybatis.org/)
+## [MVC](./mvc)
 
-[GitHub](https://github.com/mybatis/spring)
+## [Mail](./mail)
 
-[Mybatis文档](https://mybatis.org/mybatis-3/zh/index.html)
+## [Security](./security)
 
-[Mybatis-Spring文档](http://mybatis.org/spring/zh/index.html)
+## [Amqp](./amqp)
 
-[示例](./mybatis)
-
-## Mybatis-Plus
-
-[官网](https://mp.baomidou.com/)
-
-[文档](https://mp.baomidou.com/guide/)
-
-[GitHub](https://github.com/baomidou/mybatis-plus)
-
-[示例](./mybatis-plus)
-
-## MVC
-
-[GitHub]()
-
-[示例](./mvc)
-
-## Security
-
-[文档](https://docs.spring.io/spring-framework/docs/current/reference/html/web.html)
-
-[GitHub](https://github.com/spring-projects/spring-security)
-
-[示例](./mvc)
+## [Session](./session)
