@@ -9,12 +9,12 @@
         https://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
     <websocket:handlers>
-        <websocket:mapping path="/websocket" handler="webSocketHandler"/>
+        <websocket:mapping path="/websocket" handler="demoHandler"/>
         <websocket:handshake-interceptors>
             <bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
         </websocket:handshake-interceptors>
     </websocket:handlers>
 
-    <bean id="webSocketHandler" class="com.github.codingob.websocket.handler.WebSocketHandler"/>
+    <bean id="demoHandler" class="com.github.codingob.websocket.handler.DemoHandler"/>
 
 </beans>
