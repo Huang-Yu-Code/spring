@@ -4,21 +4,25 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
+    <groupId>com.github.codingob</groupId>
     <artifactId>spring</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0</version>
     <modules>
-        <module>bean</module>
-        <module>mvc</module>
-        <module>data</module>
+        <module>context</module>
         <module>aop</module>
-        <module>security</module>
+        <module>test</module>
+        <module>data</module>
         <module>mybatis</module>
-        <module>mail</module>
         <module>mybatis-plus</module>
+        <module>mail</module>
         <module>amqp</module>
         <module>session</module>
+        <module>security</module>
+        <module>webmvc</module>
+        <module>websocket</module>
+        <module>webflux</module>
+        <module>webservice</module>
     </modules>
 
     <properties>
@@ -46,12 +50,27 @@
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
                 <artifactId>spring-jdbc</artifactId>
                 <version>${spring.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
                 <artifactId>spring-webmvc</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-websocket</artifactId>
+                <version>${spring.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework</groupId>
+                <artifactId>spring-messaging</artifactId>
                 <version>${spring.version}</version>
             </dependency>
             <dependency>
