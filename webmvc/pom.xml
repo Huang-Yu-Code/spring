@@ -16,9 +16,8 @@
         <maven.compiler.target>8</maven.compiler.target>
         <servlet.version>4.0.1</servlet.version>
         <jsp.version>2.3.3</jsp.version>
+        <commons-fileupload.version>1.4</commons-fileupload.version>
         <jackson.version>2.12.4</jackson.version>
-        <bootstrap.version>5.0.1</bootstrap.version>
-        <jquery.version>3.6.0</jquery.version>
     </properties>
 
     <dependencyManagement>
@@ -36,19 +35,14 @@
                 <scope>provided</scope>
             </dependency>
             <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commons-fileupload.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.webjars</groupId>
-                <artifactId>jquery</artifactId>
-                <version>${jquery.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.webjars</groupId>
-                <artifactId>bootstrap</artifactId>
-                <version>${bootstrap.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -63,6 +57,10 @@
             <artifactId>javax.servlet.jsp-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webmvc</artifactId>
         </dependency>
@@ -73,14 +71,6 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>jquery</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.webjars</groupId>
-            <artifactId>bootstrap</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring WebMvc</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-row>
+        <el-col>
+            <el-button type="danger" round style="float: right;" @click="logout">退出登录</el-button>
+        </el-col>
+        <el-col :span="12" :offset="6">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>文件上传</span>
+                    <el-button style="float: right;" size="small" type="success" @click="submitUpload">上传到服务器
+                    </el-button>
+                </div>
+                <div>
+                    <el-upload
+                            class="upload-demo"
+                            ref="upload"
+                            name="file"
+                            drag
+                            action="/home/upload"
+                            :on-success="handlerSuccess"
+                            :file-list="fileList"
+                            :auto-upload="false">
+                        <i class="el-icon-upload"></i>
+                        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+                        <div class="el-upload__tip" slot="tip">只能上传jpg/png文件，且不超过500kb</div>
+                    </el-upload>
+                </div>
+            </el-card>
+        </el-col>
+        <el-col :span="12" :offset="6">
+            <el-card class="box-card">
+                <div slot="header" class="clearfix">
+                    <span>文件下载</span>
+                    <el-button style="float: right;" size="small" type="success" @click="downloadFile">下载</el-button>
+                </div>
+                <div>
+                    <el-image style="width: 500px; height: 500px" src="/static/springmvc.png" fit="fill"></el-image>
+                </div>
+            </el-card>
+
+        </el-col>
+    </el-row>
+</div>
+<script src="/static/home.js"></script>
+</body>
+</html>

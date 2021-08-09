@@ -14,7 +14,7 @@ import org.springframework.stereotype.Controller;
 @Controller
 public class WebSocketController {
 
-    @MessageMapping("/hello")
+    @MessageMapping("/spring")
     @SendTo("/topic/spring")
     public String response(String message) {
         System.out.println(message);

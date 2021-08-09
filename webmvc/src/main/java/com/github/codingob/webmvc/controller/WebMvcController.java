@@ -1,69 +1,143 @@
 package com.github.codingob.webmvc.controller;
 
-import com.github.codingob.webmvc.model.Json;
+import com.github.codingob.webmvc.model.Login;
+import com.github.codingob.webmvc.model.Response;
 import com.github.codingob.webmvc.service.WebMvcService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 /**
+ * Controller
+ *
  * @author codingob
+ * @version 1.0.0
+ * @since JDK1.8
  */
 @Controller
-@RequestMapping("/")
 public class WebMvcController {
-    @Resource
-    private WebMvcService webMvcService;
+    private WebMvcService service;
 
-    @GetMapping("")
-    public String index(Model model) {
-        model.addAttribute("location", "首页");
+    @Autowired
+    public void setService(WebMvcService service) {
+        this.service = service;
+    }
+
+    /**
+     * 首页
+     *
+     * @return 视图
+     */
+    @GetMapping("/")
+    public String index() {
         return "index";
     }
 
-    @GetMapping("login")
-    public String login(Model model) {
-        model.addAttribute("location", "登录认证");
-        return "login";
+    /**
+     * 错误视图
+     *
+     * @return 视图
+     */
+    @RequestMapping("/error")
+    public String error() {
+        return "error";
     }
 
-    @PostMapping("login")
-    public String login(Model model,
-                        HttpServletRequest request,
-                        @RequestParam("username") String username,
-                        @RequestParam("password") String password) {
-        boolean login = webMvcService.login(request, username, password);
-        if (login) {
-            return home(model);
+    /**
+     * 登录视图
+     *
+     * @param request 请求
+     * @return 登录视图
+     */
+    @GetMapping("/login")
+    public String login(HttpServletRequest request) {
+        String username = (String) request.getSession().getAttribute("username");
+        if (username != null) {
+            return "home";
         }
-        model.addAttribute("location", "登录失败");
-        model.addAttribute("info", "账号或密码错误");
         return "login";
     }
 
-    @GetMapping("home")
-    public String home(Model model) {
-        model.addAttribute("location", "用户首页");
+    /**
+     * 验证码
+     *
+     * @param request   请求
+     * @param timestamp 时间戳
+     * @return 验证码数据流
+     */
+    @GetMapping("/code/{timestamp}")
+    @ResponseBody
+    public ResponseEntity<byte[]> code(HttpServletRequest request, @PathVariable long timestamp) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, "image/jpeg");
+        return new ResponseEntity<>(service.code(request.getSession(), timestamp), headers, HttpStatus.OK);
+    }
+
+    /**
+     * 登录验证
+     *
+     * @param login   DTO
+     * @param request 请求
+     * @return 登录状态
+     */
+    @PostMapping("/login")
+    @ResponseBody
+    public ResponseEntity<Response> login(@RequestBody Login login, HttpServletRequest request) {
+        return new ResponseEntity<>(service.login(login, request.getSession()), HttpStatus.OK);
+    }
+
+    /**
+     * 登录后的主页
+     *
+     * @return 主页
+     */
+    @GetMapping("/home")
+    public String home() {
         return "home";
     }
 
-    @GetMapping("json")
+    /**
+     * 文件上传
+     *
+     * @param file 文件
+     * @return Void
+     */
+    @PostMapping("/home/upload")
     @ResponseBody
-    public Json json() {
-        return new Json();
+    public ResponseEntity<Void> upload(@RequestParam("file") CommonsMultipartFile file) {
+        service.upload(file, "D:/");
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("mail")
-    public String mail() {
-        return "mail";
+    /**
+     * 文件下载
+     *
+     * @return 文件流
+     */
+    @GetMapping("/home/download")
+    @ResponseBody
+    public ResponseEntity<byte[]> download() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=springmvc.png");
+        return new ResponseEntity<>(service.download("static/springmvc.png"), headers, HttpStatus.OK);
     }
 
-    @PostMapping("logout")
-    public String logout(HttpServletRequest request){
-        webMvcService.logout(request);
-        return "login";
+    /**
+     * 退出登录
+     *
+     * @param request 请求
+     * @return 登录视图
+     */
+    @PostMapping("/home/logout")
+    @ResponseBody
+    public ResponseEntity<Response> logout(HttpServletRequest request) {
+        service.logout(request.getSession());
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

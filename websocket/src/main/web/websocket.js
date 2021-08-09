@@ -1,21 +1,22 @@
 if (typeof (WebSocket) != "function") {
     alert("不支持WebSocket");
 }
-let websocket = null;
 let app = new Vue({
     el: '#app',
     data() {
         return {
+            websocket: null,
             disabled: false,
         };
     },
+
     methods: {
         connect() {
-            let socket = new SockJS("http://localhost:8080/websocket")
-            websocket = Stomp.over(socket);
-            websocket.connect({}, () => {
+            let socket = new SockJS("/websocket", null, {timeout: 15000})
+            app.websocket = Stomp.over(socket);
+            app.websocket.connect({}, () => {
                 app.disabled = true;
-                websocket.subscribe('/topic/spring', function (message) {
+                app.websocket.subscribe('/topic/spring', function (message) {
                     console.log(message);
                     app.$notify.info({
                         title: '系统通知: ',
@@ -25,13 +26,13 @@ let app = new Vue({
             });
         },
         disconnect() {
-            if (websocket != null) {
-                websocket.disconnect();
+            if (app.websocket != null) {
+                app.websocket.disconnect();
                 app.disabled = false;
             }
         },
         sendMessage() {
-            websocket.send("/app/hello", {}, JSON.stringify({
+            app.websocket.send("/app/spring", {}, JSON.stringify({
                 username: 'websocket',
                 message: 'Hello World',
             }))
