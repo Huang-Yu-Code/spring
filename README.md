@@ -8,17 +8,9 @@ Version: 5.3.9
 
 [文档](https://docs.spring.io/spring-framework/docs/current/reference/html/)
 
-## [Context](./context)
+## [IOC](./ioc)
 
-## Data
-
-### [JPA](./data/jpa)
-
-### [JDBC](./data/jdbc)
-
-### [Redis](./data/redis)
-
-### [Mongo](./data/mongo)
+## [Data](./data)
 
 ## [Mybatis](./mybatis)
 

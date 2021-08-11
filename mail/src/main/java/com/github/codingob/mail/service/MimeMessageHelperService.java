@@ -1,6 +1,8 @@
 package com.github.codingob.mail.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -14,7 +16,11 @@ import javax.mail.internet.MimeMessage;
  * @since JDK1.8
  */
 @Service
+@PropertySource("classpath:mail.properties")
 public class MimeMessageHelperService {
+    @Value("${mail.smtp.username}")
+    private String username;
+
     private JavaMailSender javaMailSender;
 
     @Autowired
@@ -26,7 +32,7 @@ public class MimeMessageHelperService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
         try {
-            mimeMessageHelper.setFrom("coderfast@qq.com");
+            mimeMessageHelper.setFrom(username);
             mimeMessageHelper.setTo(mail);
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(text);
@@ -40,7 +46,7 @@ public class MimeMessageHelperService {
         MimeMessage mimeMessage = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
-            mimeMessageHelper.setFrom("coderfast@qq.com");
+            mimeMessageHelper.setFrom(username);
             mimeMessageHelper.setTo(mail);
             mimeMessageHelper.setSubject(subject);
             mimeMessageHelper.setText(text);

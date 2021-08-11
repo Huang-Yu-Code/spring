@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Spring Session</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/sockjs-client/1.5.1/sockjs.js"></script>
+    <script src="https://cdn.bootcdn.net/ajax/libs/stomp.js/2.3.3/stomp.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-button type="primary" @click="connect" :disabled="disabled">连接</el-button>
+    <el-button type="success" @click="sendMessage" :disabled="!disabled">发送</el-button>
+    <el-button type="danger" @click="disconnect" :disabled="!disabled">断开</el-button>
+</div>
+<script src="/static/js/index.js"></script>
+</body>
+</html>

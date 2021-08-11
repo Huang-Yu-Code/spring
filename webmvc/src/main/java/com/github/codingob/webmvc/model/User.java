@@ -1,5 +1,6 @@
 package com.github.codingob.webmvc.model;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,14 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class User {
+
+    public interface WithoutPasswordView {
+    }
+
+
+    public interface WithPasswordView extends WithoutPasswordView {
+    }
+
     private Integer id;
     private String username;
     private String password;
@@ -20,5 +29,15 @@ public class User {
     public User(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    @JsonView(WithoutPasswordView.class)
+    public String getUsername() {
+        return this.username;
+    }
+
+    @JsonView(WithPasswordView.class)
+    public String getPassword() {
+        return this.password;
     }
 }
