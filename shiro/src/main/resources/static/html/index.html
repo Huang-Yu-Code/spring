@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Shiro</title>
+    <link rel="shortcut icon" type="image/x-icon" href="static/favicon.ico">
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+<div id="app">
+    <el-row>
+        <el-col :span="12">
+            <div>
+                <img src="static/img/servlet.png" width="750" height="300" alt="Servlet">
+                <img src="static/img/shiro.png" width="239" height="85" alt="Shiro">
+                <img src="static/img/spring.png" width="300" height="77" alt="Spring">
+            </div>
+        </el-col>
+        <el-col :span="12">
+            <el-tabs v-model="activeTab">
+                <el-tab-pane label="注册" name="logon">
+                    <el-col :span="16" :offset="4">
+                        <el-form ref="logonForm" :rules="rulesLogon" :model="logonForm" label-width="40px">
+                            <el-form-item prop="username">
+                                <el-input placeholder="请输入账号" type="text" v-model="logonForm.username">
+                                    <template slot="prepend">账号</template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item prop="password">
+                                <el-input placeholder="请输入密码" type="password" v-model="logonForm.password">
+                                    <template slot="prepend">密码</template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item prop="rePassword">
+                                <el-input placeholder="请输入密码" type="password" v-model="logonForm.rePassword">
+                                    <template slot="prepend">重复密码</template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item prop="code">
+                                <el-input placeholder="请输入验证码" type="text" v-model="logonForm.code" maxlength="4">
+                                    <template slot="prepend">验证码</template>
+                                    <el-image :src="codeURL" fit="fill" slot="suffix"></el-image>
+                                    <el-button slot="append" @click="codeFlush">刷新</el-button>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="clickLogon('logonForm')">注册</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-col>
+                </el-tab-pane>
+                <el-tab-pane label="登录" name="login">
+                    <el-col :span="16" :offset="4">
+                        <el-form ref="loginForm" :model="loginForm" :rules="rulesLogin" label-width="40px">
+                            <el-form-item prop="username">
+                                <el-input placeholder="请输入账号" type="text" v-model="loginForm.username">
+                                    <template slot="prepend">账号</template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item prop="password">
+                                <el-input placeholder="请输入密码" type="password" v-model="loginForm.password">
+                                    <template slot="prepend">密码</template>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item prop="code">
+                                <el-input placeholder="请输入验证码" type="text" v-model="loginForm.code" maxlength="4">
+                                    <template slot="prepend">
+                                        验证码
+                                    </template>
+                                    <el-image :src="codeURL" fit="fill" slot="suffix"></el-image>
+                                    <el-button slot="append" @click="codeFlush">
+                                        刷新
+                                    </el-button>
+                                </el-input>
+                            </el-form-item>
+                            <el-form-item>
+                                <el-button type="primary" @click="clickLogin('loginForm')" :disabled="!disabled">登录</el-button>
+                                <el-button type="primary" @click="clickLogout" :disabled="disabled">注销</el-button>
+                            </el-form-item>
+                        </el-form>
+                    </el-col>
+                </el-tab-pane>
+                <el-tab-pane label="角色" name="roles">
+                    <el-button type="primary" @click="hasRole('user')">用户</el-button>
+                    <el-button type="primary" @click="hasRole('admin')">管理员</el-button>
+                </el-tab-pane>
+                <el-tab-pane label="权限" name="permissions">
+                    <el-button type="primary" @click="hasPermission('user:create')">user:create</el-button>
+                    <el-button type="primary" @click="hasPermission('user:read')">user:read</el-button>
+                    <el-button type="primary" @click="hasPermission('user:update')">user:update</el-button>
+                    <el-button type="primary" @click="hasPermission('user:delete')">user:delete</el-button>
+                    <el-button type="primary" @click="hasPermission('user:*')">user:*</el-button>
+                </el-tab-pane>
+            </el-tabs>
+        </el-col>
+    </el-row>
+</div>
+</body>
+<script src="static/js/index.js"></script>
+</html>
