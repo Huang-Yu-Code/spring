@@ -4,14 +4,19 @@ import com.github.codingob.web.mvc.dto.Login;
 import com.github.codingob.web.mvc.dto.Logon;
 import com.github.codingob.web.mvc.dto.Response;
 import com.github.codingob.web.mvc.service.MvcService;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.logging.Logger;
 
 /**
  * Controller
@@ -22,6 +27,7 @@ import java.io.File;
  */
 @RestController
 public class MvcController {
+    private static final Logger logger = Logger.getLogger("MvcController.class");
 
     private MvcService mvcService;
 
@@ -38,6 +44,7 @@ public class MvcController {
      */
     @GetMapping("/code/{timestamp}")
     public ResponseEntity<byte[]> code(@PathVariable long timestamp) {
+        logger.info("获取验证码");
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.CONTENT_TYPE, "image/jpeg");
         return ResponseEntity.ok().headers(headers).body(mvcService.getCode(timestamp));
@@ -53,9 +60,9 @@ public class MvcController {
     public Response logon(@RequestBody Logon logon) {
         try {
             mvcService.logon(logon);
-            return new Response(true);
+            return Response.success();
         } catch (RuntimeException e) {
-            return new Response(e.getMessage());
+            return Response.fair(e.getMessage());
         }
     }
 
@@ -69,9 +76,9 @@ public class MvcController {
     public Response login(@RequestBody Login login) {
         try {
             mvcService.login(login);
-            return new Response(true);
-        } catch (RuntimeException exception) {
-            return new Response(exception.getMessage());
+            return Response.success();
+        } catch (RuntimeException e) {
+            return Response.fair(e.getMessage());
         }
     }
 
@@ -81,9 +88,9 @@ public class MvcController {
      * @return 注销结果
      */
     @PostMapping("/home/logout")
-    public ResponseEntity<Response> logout() {
+    public Response logout() {
         mvcService.logout();
-        return ResponseEntity.ok().build();
+        return Response.success();
     }
 
     /**
@@ -96,9 +103,9 @@ public class MvcController {
     public Response upload(@RequestParam("file") CommonsMultipartFile[] files) {
         try {
             mvcService.upload(files, "D:/");
-            return new Response(true);
+            return Response.success();
         } catch (Exception e) {
-            return new Response(e.getMessage());
+            return Response.fair(e.getMessage());
         }
     }
 
@@ -107,19 +114,18 @@ public class MvcController {
      *
      * @return 文件流
      */
-    @GetMapping("/home/download")
-    public ResponseEntity<Object> download() {
-        String file = "file.txt";
+    @GetMapping("/home/download/{fileName}")
+    public ResponseEntity<Object> download(@PathVariable String fileName) {
         String path = "D:/";
+        File file = new File(path + fileName);
         try {
-            byte[] bytes = mvcService.download(new File(path + file));
             HttpHeaders headers = new HttpHeaders();
-            headers.add(HttpHeaders.CONTENT_TYPE, "application/octet-stream");
-            headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + file);
-            return new ResponseEntity<>(bytes, headers, HttpStatus.OK);
-        }
-        catch (Exception e) {
-            return new ResponseEntity<>(new Response("上传失败"), new HttpHeaders(), HttpStatus.BAD_REQUEST);
+            byte[] bytes = FileUtils.readFileToByteArray(file);
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.setContentDisposition(ContentDisposition.attachment().filename(fileName, StandardCharsets.UTF_8).build());
+            return ResponseEntity.ok().headers(headers).body(bytes);
+        } catch (IOException e) {
+            return ResponseEntity.ok().body("资源不存在");
         }
     }
 

@@ -58,7 +58,8 @@ const app = new Vue({
                 code: null,
             },
             disabled: true,
-            uploadURL:'home/upload',
+            fileMaxSize: 500,
+            uploadURL: 'home/upload',
             downloadURL: 'home/download',
 
         }
@@ -130,20 +131,63 @@ const app = new Vue({
                     this.disabled = !this.disabled;
                 });
         },
-        uploadSuccess(response, file, fileList) {
-            this.$notify.success({
-                title: '系统通知: ',
-                message: '上传成功',
-            });
+        uploadBefore(file) {
+            if (file.size > 1024 * this.fileMaxSize) {
+                this.$notify.error({
+                    title: '系统通知: ',
+                    message: '文件太大: ' + Math.ceil(file.size / 1024) + 'kb',
+                });
+                return false;
+            }
+            return true;
         },
-        uploadError(err, file, fileList){
+        uploadSuccess(response, file, fileList) {
+            if (response.status) {
+                this.$notify.success({
+                    title: '系统通知: ',
+                    message: '上传成功',
+                });
+            } else {
+                this.$notify.error({
+                    title: '系统通知: ',
+                    message: '上传成功',
+                });
+            }
+        },
+        uploadError(err, file, fileList) {
             this.$notify.error({
                 title: '系统通知: ',
-                message: '上传失败',
+                message: '上传失败(' + err.data + ')',
             });
         },
-        submitUpload(){
+        submitUpload() {
             this.$refs.upload.submit();
+        },
+        fileDownload() {
+            axios.get('home/download/中文.woff', this.logonForm, {
+                baseURL: 'http://localhost:8080/webmvc/'
+            })
+                .then((response) => {
+                    const headers = response.headers;
+                    const file = response.headers['content-disposition'].split("attachment; filename*=UTF-8''")[1];
+                    if (headers['content-type'] === 'application/octet-stream;charset=utf-8') {
+                        const blob = new Blob([response.data]);
+                        const link=document.createElement('a');
+                        link.download=decodeURI(file);
+                        link.style.display='none';
+                        link.href=URL.createObjectURL(blob);
+                        document.body.append(link);
+                        link.click();
+                        URL.revokeObjectURL(link.href);
+                        document.body.removeChild(link);
+                    }
+                    else {
+                        this.$notify.error({
+                            title: '系统通知: ',
+                            message: '下载失败(' + response.data + ')',
+                        });
+                    }
+                });
         },
     }
 }).$mount('#app');

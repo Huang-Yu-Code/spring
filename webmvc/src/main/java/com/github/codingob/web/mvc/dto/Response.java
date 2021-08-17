@@ -11,17 +11,37 @@ import lombok.NoArgsConstructor;
  * @since JDK1.8
  */
 @Data
-@NoArgsConstructor
 public class Response {
     private boolean status;
     private String info;
+    private Object data;
 
-    public Response(boolean status){
-        this.status=status;
+    private Response() {
+
     }
 
-    public Response(String info) {
-        this.info = info;
+    private Response(Object data) {
+        this.status = true;
+        this.info = "success";
+        this.data = data;
+    }
+
+    private Response(boolean status) {
+        this.status = status;
+    }
+
+    public static Response success(){
+        return new Response(null);
+    }
+
+    public static Response success(Object data){
+        return new Response(data);
+    }
+
+    public static Response fair(String info) {
+        Response response = new Response();
+        response.setInfo(info);
+        return response;
     }
 
 }

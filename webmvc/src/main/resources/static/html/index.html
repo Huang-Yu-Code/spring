@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Shiro</title>
+    <title>Spring Mvc</title>
     <link rel="shortcut icon" type="image/x-icon" href="static/favicon.ico">
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
@@ -87,6 +87,7 @@
                     <el-upload
                             class="upload-demo"
                             ref="upload"
+                            :before-upload="uploadBefore"
                             :on-success="uploadSuccess"
                             :on-error="uploadError"
                             :action="uploadURL"
@@ -95,11 +96,11 @@
                         <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
                         <el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">上传到服务器
                         </el-button>
-                        <div slot="tip" class="el-upload__tip">只能上传不超过500kb的文件</div>
+                        <div slot="tip" class="el-upload__tip">只能上传不超过{{fileMaxSize}}kb的文件</div>
                     </el-upload>
                 </el-tab-pane>
                 <el-tab-pane label="文件下载" name="fileDownload">
-                    <el-link :underline="false" type="primary" :href="downloadURL">下载
+                    <el-button type="primary" @click="fileDownload">下载</el-button>
                     </el-link>
                 </el-tab-pane>
             </el-tabs>
