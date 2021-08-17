@@ -28,7 +28,7 @@ public class EntityDao {
     }
 
     public int create(Entity entity) {
-        sql = "INSERT INTO Entity(NAME,GENDER,MONEY,CREATE_TIME,IS_DELETE) VALUES(?,?,?,?,?)";
+        sql = "INSERT INTO Entity(NAME,GENDER,MONEY,CREATE_TIME,DELETE) VALUES(?,?,?,?,?)";
         return jdbcTemplate.update(sql, entity.getName(), entity.isGender(), new BigDecimal(1000), new Timestamp(System.currentTimeMillis()), entity.isDelete());
     }
 

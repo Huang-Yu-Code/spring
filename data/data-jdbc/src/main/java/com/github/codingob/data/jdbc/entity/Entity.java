@@ -21,7 +21,7 @@ public class Entity {
     private boolean gender;
     private BigDecimal money;
     private Timestamp createTime;
-    private boolean isDelete;
+    private boolean delete;
 
     public Entity(String name, boolean gender) {
         this.name = name;
