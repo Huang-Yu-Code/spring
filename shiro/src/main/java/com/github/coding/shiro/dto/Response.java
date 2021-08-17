@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class Response {
     private boolean status;
     private String info;
-    private Object data;
 
     public Response(boolean status){
         this.status=status;
@@ -23,10 +22,5 @@ public class Response {
 
     public Response(String info) {
         this.info = info;
-    }
-
-    public Response(Object data) {
-        this.status = true;
-        this.data = data;
     }
 }

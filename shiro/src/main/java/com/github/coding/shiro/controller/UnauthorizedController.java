@@ -1,7 +1,7 @@
 package com.github.coding.shiro.controller;
 
+import com.github.coding.shiro.dto.Response;
 import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.authz.UnauthorizedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UnauthorizedController {
     @ResponseBody
     @ExceptionHandler(AuthorizationException.class)
-    public String authorizationException(Exception ex) {
-        return "无访问权限";
+    public Response authorizationException() {
+        return new Response("无访问权限");
     }
 }

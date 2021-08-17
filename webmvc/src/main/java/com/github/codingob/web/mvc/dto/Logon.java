@@ -1,10 +1,10 @@
-package com.github.codingob.webmvc.model;
+package com.github.codingob.web.mvc.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * DTO
+ * 注册
  *
  * @author codingob
  * @version 1.0.0
@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-public class Login {
-    private User user;
+public class Logon {
+    private String username;
+    private String password;
+    private String rePassword;
     private String code;
 }

@@ -1,11 +1,10 @@
-package com.github.codingob.webmvc.model;
+package com.github.codingob.web.mvc.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Response
+ * Response响应
  *
  * @author codingob
  * @version 1.0.0
@@ -13,9 +12,16 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 public class Response {
     private boolean status;
     private String info;
-    private Object data;
+
+    public Response(boolean status){
+        this.status=status;
+    }
+
+    public Response(String info) {
+        this.info = info;
+    }
+
 }

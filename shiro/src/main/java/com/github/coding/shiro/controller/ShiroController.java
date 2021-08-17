@@ -4,7 +4,6 @@ import com.github.coding.shiro.dto.Login;
 import com.github.coding.shiro.dto.Logon;
 import com.github.coding.shiro.dto.Response;
 import com.github.coding.shiro.service.AuthService;
-import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -31,6 +30,11 @@ public class ShiroController {
         this.authService = authService;
     }
 
+    /**
+     * 注册
+     * @param logon 注册表单DTO
+     * @return 注册结果
+     */
     @PostMapping("/logon")
     public Response logon(@RequestBody Logon logon) {
         System.out.println(logon);
@@ -44,6 +48,11 @@ public class ShiroController {
         return response;
     }
 
+    /**
+     * 登录
+     * @param login 登录表单DTO
+     * @return 登录结果
+     */
     @PostMapping("/login")
     public Response login(@RequestBody Login login) {
         System.out.println(login);
@@ -64,6 +73,10 @@ public class ShiroController {
         return response;
     }
 
+    /**
+     * 注销
+     * @return 注销结果
+     */
     @RequiresRoles({"user"})
     @GetMapping("/logout")
     public Response login(){
@@ -71,6 +84,11 @@ public class ShiroController {
         return new Response(true);
     }
 
+    /**
+     * 验证码
+     * @param timestamp 时间戳
+     * @return 验证码数组
+     */
     @GetMapping("/code/{timestamp}")
     public ResponseEntity<byte[]> code(@PathVariable long timestamp) {
         HttpHeaders headers = new HttpHeaders();
@@ -78,12 +96,22 @@ public class ShiroController {
         return ResponseEntity.ok().headers(headers).body(authService.getCode(timestamp));
     }
 
+    /**
+     * 查询身份
+     * @param name 身份名
+     * @return 是否具有该身份
+     */
     @RequiresAuthentication
     @GetMapping("/roles/{name}")
     public Response hasRole(@PathVariable String name) {
         return new Response(authService.hasRole(name));
     }
 
+    /**
+     * 查询权限
+     * @param name 权限名
+     * @return 是否具有该权限
+     */
     @RequiresAuthentication
     @GetMapping("/permissions/{name}")
     public Response hasPermission(@PathVariable String name) {
