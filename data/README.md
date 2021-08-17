@@ -1,9 +1,9 @@
 # Spring Data
 
-## [JPA](./data/jpa)
+## [JPA](./data-jpa)
 
-## [JDBC](./data/jdbc)
+## [JDBC](./data-jdbc)
 
-## [Redis](./data/redis)
+## [Redis](./data-redis)
 
-## [Mongo](./data/mongo)
+## [Mongodb](./data-mongodb)
