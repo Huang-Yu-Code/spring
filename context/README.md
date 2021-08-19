@@ -104,3 +104,67 @@ public final class Boot {
 </dependencies>
 ```
 
+## 常用注解和xml配置说明
+
+`@Configuration`:配置
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+</beans>
+```
+
+`@Bean(initMethod = "init", destroyMethod = "destroy")`: 声明Bean以及初始化和销毁方法
+
+`@Scope("prototype")`:作用域
+
+```xml
+
+<bean id="xxx" class="package.xxx.xxx.XXX" scope="prototype" init-method="init" destroy-method="destroy"/>
+```
+
+`@ImportResource(locations = "classpath:xxx.xml")`:从xml导入配置
+
+```xml
+
+<import resource="xxx.xml"/>
+```
+
+`@PropertySource("classpath:xxx.properties")`:加载properties文件
+
+```xml
+
+<bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
+    <property name="locations" value="classpath:xxx.properties"/>
+</bean>
+```
+
+```xml
+
+<context:property-placeholder location="classpath:xxx.properties"/>
+```
+
+`@Import(XXX.class)`: 导入其他带有`@Configuration`的配置类
+
+开启注解
+
+```xml
+
+<context:annotation-config/>
+```
+
+`@ComponentScan("package.xxx")`:包扫描
+
+```xml
+
+<context:component-scan base-package="package.xxx"/>
+```
+
+`@Autowired`:根据类型自动注入Bean
+
+
+

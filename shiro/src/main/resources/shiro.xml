@@ -23,7 +23,7 @@
 
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
-    <bean id="shiroRealm" class="com.github.coding.shiro.realm.ShiroRealm"/>
+    <bean id="shiroRealm" class="com.github.codingob.shiro.realm.ShiroRealm"/>
 
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
           depends-on="lifecycleBeanPostProcessor"/>

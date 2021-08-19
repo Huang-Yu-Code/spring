@@ -1,4 +1,4 @@
-# Spring-MVC
+# Spring WebMVC
 
 ## 依赖
 

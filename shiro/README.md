@@ -342,7 +342,7 @@ shiro.xml
 
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
-    <bean id="shiroRealm" class="com.github.coding.shiro.realm.ShiroRealm"/>
+    <bean id="shiroRealm" class="com.github.codingob.shiro.realm.ShiroRealm"/>
 
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"
           depends-on="lifecycleBeanPostProcessor"/>
@@ -359,7 +359,7 @@ realm
 ```java
 package com.github.coding.shiro.realm;
 
-import com.github.coding.shiro.service.AuthService;
+import AuthService;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;

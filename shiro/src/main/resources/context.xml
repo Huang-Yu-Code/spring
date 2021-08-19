@@ -10,5 +10,5 @@
     <import resource="mvc.xml"/>
     <import resource="shiro.xml"/>
 
-    <context:component-scan base-package="com.github.coding.shiro"/>
+    <context:component-scan base-package="com.github.codingob.shiro"/>
 </beans>

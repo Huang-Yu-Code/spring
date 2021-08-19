@@ -1,7 +1,6 @@
 package com.github.codingob.web.mvc.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * Response响应

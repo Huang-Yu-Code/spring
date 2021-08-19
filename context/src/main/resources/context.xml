@@ -5,32 +5,30 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         https://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
-        https://www.springframework.org/schema/context/spring-context.xsd"
-       xmlns:p="http://www.springframework.org/schema/p"
-       xmlns:c="http://www.springframework.org/schema/c">
+        https://www.springframework.org/schema/context/spring-context.xsd">
 
-    <bean id="bean1" class="com.demo.spring.bean.xml.Bean" init-method="init" destroy-method="destroy" primary="true">
+    <bean id="bean1" class="com.github.codingob.context.bean.DemoBean" init-method="init" destroy-method="destroy" primary="true">
         <property name="id" value="1"/>
-        <property name="name" value="xml-bean-1"/>
+        <property name="name" value="bean1"/>
     </bean>
 
     <import resource="bean2.xml"/>
 
-    <bean id="bean3" class="com.demo.spring.bean.xml.Bean">
-        <constructor-arg name="id" type="int" value="3"/>
-        <constructor-arg name="name" type="java.lang.String" value="xml-bean-3"/>
+    <bean id="beanInstanceFactory" class="com.github.codingob.context.bean.BeanInstanceFactory"/>
+
+    <bean id="bean4" scope="prototype" factory-bean="beanInstanceFactory" factory-method="createBean">
+        <constructor-arg name="id" value="4"/>
+        <constructor-arg name="name" value="bean4"/>
     </bean>
 
-    <bean id="beanInstanceFactory" class="com.demo.spring.bean.xml.BeanInstanceFactory"/>
-
-    <bean id="bean4" factory-bean="beanInstanceFactory" factory-method="createBean"
-          c:id="4"
-          c:name="xml-bean-4">
+    <bean id="demoComponent1" class="com.github.codingob.context.component.DemoComponent">
+        <property name="bean1" ref="bean1"/>
+        <property name="bean4" ref="bean1"/>
     </bean>
 
-    <bean id="bean5" class="com.demo.spring.bean.xml.Bean" depends-on="bean1"
-          p:id="5"
-          p:name="xml-bean-5" scope="prototype">
+    <bean id="bean5" class="com.github.codingob.context.bean.DemoBean" depends-on="bean1">
+        <property name="id" value="5"/>
+        <property name="name" value="bean5"/>
     </bean>
 
     <bean class="org.springframework.context.support.PropertySourcesPlaceholderConfigurer">
@@ -39,8 +37,8 @@
 
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
-    <bean id="dataSource" destroy-method="close"
-          class="com.demo.spring.bean.xml.DataSource">
+    <bean id="dataSource" init-method="init" destroy-method="destroy"
+          class="com.github.codingob.context.bean.DataSource">
         <property name="driverClassName" value="${jdbc.driverClassName}"/>
         <property name="url" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
@@ -48,5 +46,7 @@
     </bean>
 
     <context:annotation-config/>
+
+    <context:component-scan base-package="com.github.codingob.context"/>
 
 </beans>
