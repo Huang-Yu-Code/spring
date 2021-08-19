@@ -70,6 +70,7 @@ amqp.password=guest
 交换器
 
 ```java
+
 @Configuration
 public class ExchangeConfig {
     @Bean
@@ -92,6 +93,7 @@ public class ExchangeConfig {
 队列
 
 ```java
+
 @Configuration
 public class QueueConfig {
     @Bean
@@ -110,32 +112,32 @@ public class QueueConfig {
     }
 
     @Bean
-    public Queue fanoutQueueA(){
+    public Queue fanoutQueueA() {
         return new Queue("fanout.queue.A");
     }
 
     @Bean
-    public Queue fanoutQueueB(){
+    public Queue fanoutQueueB() {
         return new Queue("fanout.queue.B");
     }
 
     @Bean
-    public Queue directQueueA(){
+    public Queue directQueueA() {
         return new Queue("direct.queue.A");
     }
 
     @Bean
-    public Queue directQueueB(){
+    public Queue directQueueB() {
         return new Queue("direct.queue.B");
     }
 
     @Bean
-    public Queue topicQueueA(){
+    public Queue topicQueueA() {
         return new Queue("topic.queue.A");
     }
 
     @Bean
-    public Queue topicQueueB(){
+    public Queue topicQueueB() {
         return new Queue("topic.queue.B");
     }
 
@@ -145,6 +147,7 @@ public class QueueConfig {
 绑定
 
 ```java
+
 @Configuration
 public class BindingConfig {
 
@@ -180,9 +183,98 @@ public class BindingConfig {
 }
 ```
 
+消息确认
+
+发送确认
+
+```java
+
+@PropertySource("classpath:amqp.properties")
+public class AmqpConfig {
+    @Value("${amqp.host}")
+    private String host;
+    @Value("${amqp.port}")
+    private int port;
+    @Value("${amqp.virtualHost}")
+    private String virtualHost;
+    @Value("${amqp.username}")
+    private String username;
+    @Value("${amqp.password}")
+    private String password;
+
+    @Bean
+    public CachingConnectionFactory connectionFactory() {
+        CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
+        connectionFactory.setHost(host);
+        connectionFactory.setPort(port);
+        connectionFactory.setVirtualHost(virtualHost);
+        connectionFactory.setUsername(username);
+        connectionFactory.setPassword(password);
+        connectionFactory.setPublisherReturns(true);
+        connectionFactory.setPublisherConfirmType(CachingConnectionFactory.ConfirmType.CORRELATED);
+        return connectionFactory;
+    }
+
+    @Bean
+    public RabbitAdmin amqpAdmin() {
+        return new RabbitAdmin(connectionFactory());
+    }
+
+    @Bean
+    public RabbitTemplate rabbitTemplate() {
+        RabbitTemplate rabbitTemplate = new RabbitTemplate(connectionFactory());
+        rabbitTemplate.setMandatory(true);
+        rabbitTemplate.setReturnsCallback(returnedMessage -> {
+            System.out.println("消息路由失败!");
+            System.out.println(returnedMessage);
+        });
+        rabbitTemplate.setConfirmCallback((correlationData, b, s) -> {
+            if (b) {
+                System.out.println("消息投递成功");
+            } else {
+                System.out.println("消息投递失败 " + s);
+            }
+        });
+        return rabbitTemplate;
+    }
+}
+```
+
+消费确认
+
+```java
+@Service
+public class QueueConsumer {
+    private static int NUM = 0;
+
+    @RabbitListener(queues = {"queue"}, ackMode = "MANUAL")
+    @RabbitHandler
+    public void receive(String msg, Channel channel, Message message) throws IOException {
+        try {
+            int i = 1 / 0;
+            System.out.println("queue: " + msg);
+            channel.basicAck(message.getMessageProperties().getDeliveryTag(), false);
+        } catch (Exception e) {
+            if (NUM < 3) {
+                // 拒绝确认消息
+                channel.basicNack(message.getMessageProperties().getDeliveryTag(), false, true);
+                System.out.println("消息已拒绝确认,重回队列---" + NUM);
+                NUM++;
+            } else {
+                // 拒绝消息
+                channel.basicReject(message.getMessageProperties().getDeliveryTag(), false);
+                System.out.println("消息已拒绝,从队列中删除");
+                NUM=0;
+            }
+        }
+    }
+}
+```
+
 ## 简单队列
 
 ```java
+
 @Service
 public class QueueConsumer {
     @RabbitListener(queues = {"queue"})
@@ -196,6 +288,7 @@ public class QueueConsumer {
 ## 工作队列
 
 ```java
+
 @Service
 public class WorkConsumer {
     @RabbitListener(queues = {"work.queue.fair"})
@@ -225,7 +318,7 @@ public class WorkConsumer {
         System.out.println("work.queue.loop2: " + message);
     }
 
-    private void service(){
+    private void service() {
         try {
             TimeUnit.SECONDS.sleep(3);
         } catch (InterruptedException e) {
@@ -238,6 +331,7 @@ public class WorkConsumer {
 ## 发布订阅
 
 ```java
+
 @Service
 public class FanoutConsumer {
     @RabbitListener(queues = {"fanout.queue.A"})
@@ -257,6 +351,7 @@ public class FanoutConsumer {
 ## 路由模式
 
 ```java
+
 @Service
 public class DirectConsumer {
     @RabbitListener(queues = {"direct.queue.A"})
@@ -276,6 +371,7 @@ public class DirectConsumer {
 ## 主题模式
 
 ```java
+
 @Service
 public class TopicConsumer {
     @RabbitListener(queues = {"topic.queue.A"})

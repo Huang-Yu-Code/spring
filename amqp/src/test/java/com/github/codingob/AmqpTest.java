@@ -1,16 +1,11 @@
 package com.github.codingob;
 
+import com.github.codingob.amqp.config.AmqpConfig;
 import org.junit.jupiter.api.Test;
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.connection.CorrelationData;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.test.context.SpringRabbitTest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 /**
@@ -20,52 +15,16 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
  * @version 1.0.0
  * @since JDK1.8
  */
-@SpringJUnitConfig
+@SpringJUnitConfig(AmqpConfig.class)
 @SpringRabbitTest
 public class AmqpTest {
-    @Configuration
-    @PropertySource("classpath:amqp.properties")
-    @EnableRabbit
-    public static class Config {
-        @Value("${amqp.host}")
-        private String host;
-        @Value("${amqp.port}")
-        private int port;
-        @Value("${amqp.virtualHost}")
-        private String virtualHost;
-        @Value("${amqp.username}")
-        private String username;
-        @Value("${amqp.password}")
-        private String password;
-
-        @Bean
-        public CachingConnectionFactory connectionFactory() {
-            CachingConnectionFactory connectionFactory = new CachingConnectionFactory();
-            connectionFactory.setHost(host);
-            connectionFactory.setPort(port);
-            connectionFactory.setVirtualHost(virtualHost);
-            connectionFactory.setUsername(username);
-            connectionFactory.setPassword(password);
-            return connectionFactory;
-        }
-
-        @Bean
-        public RabbitAdmin amqpAdmin() {
-            return new RabbitAdmin(connectionFactory());
-        }
-
-        @Bean
-        public RabbitTemplate rabbitTemplate() {
-            return new RabbitTemplate(connectionFactory());
-        }
-    }
 
     @Autowired
     private RabbitTemplate rabbitTemplate;
 
     @Test
     void sendQueue() {
-        rabbitTemplate.convertAndSend("queue", "Hello World!");
+        rabbitTemplate.convertAndSend("","queue", "Hello World!",new CorrelationData("1"));
     }
 
     @Test
