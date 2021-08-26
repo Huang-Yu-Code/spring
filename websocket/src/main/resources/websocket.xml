@@ -16,6 +16,6 @@
     </websocket:message-broker>
 
     <bean id="pathMatcher" class="org.springframework.util.AntPathMatcher">
-        <constructor-arg index="0" value="."/>
+        <constructor-arg name="pathSeparator" value="/"/>
     </bean>
 </beans>

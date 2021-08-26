@@ -6,13 +6,12 @@ let app = new Vue({
             disabled: false,
         };
     },
-
     methods: {
         connect() {
             if (typeof (WebSocket) != "function") {
                 alert("不支持WebSocket");
             }
-            let socket = new SockJS("http://localhost:8080/websocket")
+            let socket = new SockJS("http://localhost:8080/websocket/websocket")
             websocket = Stomp.over(socket);
             console.log('ok');
             websocket.connect({}, () => {
