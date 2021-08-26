@@ -24,7 +24,7 @@ public class AmqpTest {
 
     @Test
     void sendQueue() {
-        rabbitTemplate.convertAndSend("","queue", "Hello World!",new CorrelationData("1"));
+        rabbitTemplate.convertAndSend("queue", "Hello World!");
     }
 
     @Test
@@ -57,6 +57,21 @@ public class AmqpTest {
         rabbitTemplate.convertAndSend("demo.topic", "mysql", "mysql");
         rabbitTemplate.convertAndSend("demo.topic", "mysql.topic", "mysql.topic");
         rabbitTemplate.convertAndSend("demo.topic", "mysql.topic.ok", "mysql.topic.ok");
+    }
+
+    @Test
+    void sendACK(){
+        rabbitTemplate.convertAndSend("","ack.queue","ack.queue",new CorrelationData("1"));
+    }
+
+    @Test
+    void sendTTL(){
+        rabbitTemplate.convertAndSend("ttl.queue","ttl.queue");
+        rabbitTemplate.convertAndSend("", "ttl.queue", "ttl.queue", message -> {
+            message.getMessageProperties().setExpiration("2000");
+            message.getMessageProperties().setContentEncoding("UTF-8");
+            return message;
+        });
     }
 
 }

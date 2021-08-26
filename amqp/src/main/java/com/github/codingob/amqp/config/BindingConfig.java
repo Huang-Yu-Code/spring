@@ -1,6 +1,7 @@
 package com.github.codingob.amqp.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -15,12 +16,12 @@ import org.springframework.context.annotation.Configuration;
 public class BindingConfig {
 
     @Bean
-    public Binding directBinding1(Queue directQueueA, DirectExchange directExchange) {
+    public Binding directBinding1(Queue directQueueA, @Qualifier("routeExchange") DirectExchange directExchange) {
         return BindingBuilder.bind(directQueueA).to(directExchange).with("0");
     }
 
     @Bean
-    public Binding directBinding2(Queue directQueueB, DirectExchange directExchange) {
+    public Binding directBinding2(Queue directQueueB, @Qualifier("routeExchange") DirectExchange directExchange) {
         return BindingBuilder.bind(directQueueB).to(directExchange).with("1");
     }
 
@@ -42,5 +43,10 @@ public class BindingConfig {
     @Bean
     public Binding topicBindingB(Queue topicQueueB, TopicExchange topicExchange) {
         return BindingBuilder.bind(topicQueueB).to(topicExchange).with("mysql.#");
+    }
+
+    @Bean
+    public Binding deadBinding(Queue deadQueue,DirectExchange deadExchange){
+        return BindingBuilder.bind(deadQueue).to(deadExchange).with("");
     }
 }

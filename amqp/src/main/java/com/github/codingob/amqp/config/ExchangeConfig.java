@@ -29,4 +29,9 @@ public class ExchangeConfig {
     public DirectExchange routeExchange() {
         return new DirectExchange("demo.direct", true, false);
     }
+
+    @Bean
+    public DirectExchange deadExchange() {
+        return new DirectExchange("demo.dead", true, false);
+    }
 }
