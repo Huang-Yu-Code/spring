@@ -6,30 +6,36 @@
 
 <dependencies>
     <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-websocket</artifactId>
-    </dependency>
-    <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-messaging</artifactId>
-    </dependency>
-    <dependency>
         <groupId>javax.servlet</groupId>
         <artifactId>javax.servlet-api</artifactId>
+        <version>4.0.1</version>
+        <scope>provided</scope>
     </dependency>
     <dependency>
-        <groupId>javax.servlet.jsp</groupId>
-        <artifactId>javax.servlet.jsp-api</artifactId>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.12.4</version>
     </dependency>
     <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
+        <version>5.3.9</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-websocket</artifactId>
+        <version>5.3.9</version>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-messaging</artifactId>
+        <version>5.3.9</version>
     </dependency>
 </dependencies>
 ```
 
-配置
-xml
+配置 xml
+
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
@@ -40,8 +46,9 @@ xml
        http://www.springframework.org/schema/websocket
        http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
-    <websocket:message-broker application-destination-prefix="/app" path-matcher="pathMatcher" preserve-publish-order="true">
-        <websocket:transport send-timeout="15000" send-buffer-size="524288" />
+    <websocket:message-broker application-destination-prefix="/app" path-matcher="pathMatcher"
+                              preserve-publish-order="true">
+        <websocket:transport send-timeout="15000" send-buffer-size="524288"/>
         <websocket:stomp-endpoint path="/websocket">
             <websocket:sockjs/>
         </websocket:stomp-endpoint>
@@ -52,27 +59,6 @@ xml
         <constructor-arg index="0" value="."/>
     </bean>
 </beans>
-```
-
-java
-
-```java
-
-@Configuration
-@EnableWebSocketMessageBroker
-public class WebSocketStompConfig implements WebSocketMessageBrokerConfigurer {
-
-    @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/websocket").withSockJS();
-    }
-
-    @Override
-    public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/topic");
-        registry.setApplicationDestinationPrefixes("/app");
-    }
-}
 ```
 
 Controller

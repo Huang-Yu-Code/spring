@@ -2,25 +2,20 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:websocket="http://www.springframework.org/schema/websocket"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/websocket
+       http://www.springframework.org/schema/websocket/spring-websocket.xsd">
 
-    <websocket:handlers allowed-origins="*">
-        <websocket:mapping path="/websocket" handler="webSocketHandler"/>
+    <websocket:message-broker application-destination-prefix="/app" path-matcher="pathMatcher" preserve-publish-order="true">
+        <websocket:transport send-timeout="15000" send-buffer-size="524288" />
+        <websocket:stomp-endpoint path="/websocket">
+            <websocket:sockjs/>
+        </websocket:stomp-endpoint>
+        <websocket:simple-broker prefix="/topic"/>
+    </websocket:message-broker>
 
-        <websocket:handshake-interceptors>
-            <bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor"/>
-        </websocket:handshake-interceptors>
-
-        <websocket:sockjs/>
-
-    </websocket:handlers>
-
-    <bean id="webSocketHandler" class="com.github.codingob.websocket.handler.WebSocketHandler"/>
-
-    <!--缓冲区大小-->
-    <bean class="org.springframework.web.socket.server.standard.ServletServerContainerFactoryBean">
-        <property name="maxTextMessageBufferSize" value="8192"/>
-        <property name="maxBinaryMessageBufferSize" value="8192"/>
+    <bean id="pathMatcher" class="org.springframework.util.AntPathMatcher">
+        <constructor-arg index="0" value="."/>
     </bean>
-
 </beans>

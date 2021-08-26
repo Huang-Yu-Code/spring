@@ -6,8 +6,8 @@
 
     <groupId>com.github.codingob</groupId>
     <artifactId>spring</artifactId>
-    <packaging>pom</packaging>
     <version>1.0.0</version>
+    <packaging>pom</packaging>
 
     <modules>
         <module>context</module>
@@ -25,6 +25,7 @@
         <module>websocket</module>
         <module>webflux</module>
         <module>webservice</module>
+        <module>sample</module>
     </modules>
 
     <properties>
