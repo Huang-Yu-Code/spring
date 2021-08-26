@@ -67,7 +67,8 @@ public class AmqpTest {
     @Test
     void sendTTL(){
         rabbitTemplate.convertAndSend("ttl.queue","ttl.queue");
-        rabbitTemplate.convertAndSend("", "ttl.queue", "ttl.queue", message -> {
+
+        rabbitTemplate.convertAndSend("", "queue", "queue", message -> {
             message.getMessageProperties().setExpiration("2000");
             message.getMessageProperties().setContentEncoding("UTF-8");
             return message;

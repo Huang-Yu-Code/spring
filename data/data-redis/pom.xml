@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.github.codingob</groupId>
-    <artifactId>redis</artifactId>
+    <artifactId>data-redis</artifactId>
     <version>1.0.0</version>
 
     <properties>
